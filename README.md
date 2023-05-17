@@ -90,7 +90,7 @@ python eval.py --eval_folder ${eval_folder} \
 --eval_gt_file_for_grounding data/anet/captiondata/grounding/val2_for_grounding.json
 ```
 ## Performance
-We provide several checkpoints for reproduce our experiment results. You can download them from [google drive](), put the them under ```save/``` and use the above scripts to evaluate them.
+We provide several checkpoints for reproduce our experiment results. You can download them from [google drive](https://drive.google.com/drive/folders/1vvr4kYI7xGklOdgyQU5L34W2ZxRQzspK?usp=sharing), put the them under ```save/``` and use the above scripts to evaluate them.
 
 ## Citation
 If you find this repo helpful, please consider citing:
