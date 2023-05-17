@@ -1,0 +1,99 @@
+id: tacos_c3d_msvg
+base_cfg_path: cfgs/tacos_ssvg_split.yml
+
+# Data
+dataset: tacos
+visual_feature_type: ['c3d4096']
+visual_feature_folder: ['data/tacos/features/c3d']
+feature_dim: 4096
+invalid_video_json: []
+train_caption_file: 'data/tacos/loss_ratio/split_train.json'
+val_caption_file: data/tacos/loss_ratio/split_val.json
+gt_file_for_eval: ['data/tacos/loss_ratio/split_val.json']
+eval_gt_file_for_grounding: data/tacos/loss_ratio/split_val.json
+dict_file: data/tacos/vocabulary_tacos.json
+vocab_size: 1569
+train_proposal_type: gt
+train_proposal_sample_num: 30
+sample_method: nearest
+gt_proposal_sample_num: 1000
+frame_embedding_num: 200
+
+
+# train settings
+train_with_split_anno: True
+lr: 0.0001
+learning_rate_decay_start: 8
+learning_rate_decay_every: 3
+learning_rate_decay_rate: 0.5
+text_encoder_lr: 0.00001
+text_encoder_lr_decay_start: 8
+text_encoder_lr_decay_every: 3
+text_encoder_lr_decay_rate: 0.5
+weight_decay: 0.0001
+epoch: 20
+batch_size: 4
+eval_batch_size: 16
+min_epoch_when_save: 3
+train_use_amp: False
+eval_use_amp: False
+# model configs
+num_queries: 100
+ec_alpha: 1.0
+save_dir: save
+# grounding settings
+eval_enable_grounding: True
+eval_enable_maximum_matching_for_grounding: True
+# Text encoder
+huggingface_cache_dir: .cache
+pretrained_language_model: roberta-base
+word_context_modeling_type: attention_pool
+text_encoder_learning_strategy: multi_step
+enable_layer_diff_text_feature: False
+# Text Context Modeling
+enable_word_context_modeling: True
+enable_sentence_context_modeling: True
+enable_sentence_pos_embedding: True
+sentence_modeling_layer_num: 1
+# contrastive loss
+enable_contrastive: True
+enable_cross_video_cl: True
+cl_schedule_time: [0, 2]
+cl_schedule_val: [0, 0.1]
+contrastive_loss_temperature: 0.1
+contrastive_hidden_size: 128
+eval_set_cost_class: 0
+# Captioner
+dec_layers: 2
+enc_layers: 2
+transformer_ff_dim: 512
+transformer_dropout_prob: 0.1
+
+criteria_for_best_ckpt: grounding
+caption_loss_coef: 2.0
+caption_decoder_type: standard
+cap_nheads: 1
+cap_dec_n_points: 4
+cap_num_feature_levels: 4
+soft_attention: 1
+att_hid_size: 512
+ec_alpha: 1.0
+
+with_box_refine: 1
+
+fix_xcw: 1
+set_cost_caption: 0
+set_cost_giou: 4
+set_cost_bbox: 0
+set_cost_class: 2
+set_cost_cl: 2.0
+
+caption_loss_coef: 2
+giou_loss_coef: 4
+bbox_loss_coef: 0
+cls_loss_coef: 2
+count_loss_coef: 0.5
+max_eseq_length: 20
+lloss_cross_entropy: 0
+lloss_focal_loss: 0
+lloss_gau_mask: 1

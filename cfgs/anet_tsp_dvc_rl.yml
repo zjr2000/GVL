@@ -1,0 +1,24 @@
+id: anet_tsp_dvc_rl
+base_cfg_path: cfgs/release/anet_tsp_msvg_dvc.yml
+
+lr: 0.00005
+learning_rate_decay_start: 3
+learning_rate_decay_every: 3
+learning_rate_decay_rate: 0.5
+
+caption_loss_type: rl
+only_ft_captioner: True
+rl_scorer_weights: [0.95, 0.05]
+rl_scorer_types: ['Meteor', 'CiderD']
+
+enable_video_cropping: true
+crop_num: 256
+min_crop_ratio: 0.5
+nthreads: 4
+
+pretrain: full
+optimizer_type: adamw
+pretrain_path: PRETRAINED_CHECKPOINT
+
+cached_tokens: data/anet/activitynet_train_ngrams_for_cider-idxs.p
+min_epoch_when_save: 0

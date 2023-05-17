@@ -1,0 +1,9 @@
+[submodule "densevid_eval3/SODA"]
+	path = densevid_eval3/SODA
+	url = https://github.com/fujiso/SODA.git
+[submodule "densevid_eval3/pycocoevalcap"]
+	path = densevid_eval3/pycocoevalcap
+	url = https://github.com/salaniz/pycocoevalcap.git
+[submodule "densevid_eval3/cider"]
+	path = densevid_eval3/cider
+	url = https://github.com/ruotianluo/cider.git
