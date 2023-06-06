@@ -9,9 +9,8 @@
 Official implementation for paper [Learning Grounded Vision-Language Representation for Versatile Understanding in Untrimmed Videos](https://arxiv.org/abs/2303.06378)
 
 ## Introduction
-GVL is grounded video-language representation learning framework for untrimmed videos, which can automatically detects informative events and effectively excavates the alignments between multi-sentence descriptions and corresponding event segments. GVL is easily extensible to tasks covering visually-grounded language understanding and generation. We
-achieve state-of-the-art dense video captioning performance on ActivityNet Captions, YouCook2 and YouMakeup, and compet-
-itive performance on several other language generation and understanding tasks. Our method also achieved 1st place in
+GVL is a grounded video-language representation learning framework for untrimmed videos, which can automatically detect informative events and effectively excavates the alignments between multi-sentence descriptions and corresponding event segments. GVL is easily extensible to tasks covering visually-grounded language understanding and generation. We
+achieve state-of-the-art dense video captioning performance on ActivityNet Captions, YouCook2, and YouMakeup, and competitive performance on several other language generation and understanding tasks. Our method also achieved 1st place in
 both [MTVG](https://codalab.lisn.upsaclay.fr/competitions/5244) and [MDVC](https://codalab.lisn.upsaclay.fr/competitions/5102) tracks of the Person In Context (PIC) Challenge 2022.
 
 ![figures/model.png](figures/model.png)
@@ -90,7 +89,10 @@ python eval.py --eval_folder ${eval_folder} \
 --eval_gt_file_for_grounding data/anet/captiondata/grounding/val2_for_grounding.json
 ```
 ## Performance
-We provide several checkpoints for reproduce our experiment results. You can download them from [google drive](https://drive.google.com/drive/folders/1vvr4kYI7xGklOdgyQU5L34W2ZxRQzspK?usp=sharing), put the them under ```save/``` and use the above scripts to evaluate them.
+
+We also provide several checkpoints for reproducing our experiment results. You can download them from [google drive](https://drive.google.com/drive/folders/1vvr4kYI7xGklOdgyQU5L34W2ZxRQzspK?usp=sharing), put them under ```save/``` and use the above scripts to evaluate them.
+
+The result files are at: [google drive](https://drive.google.com/drive/folders/1EZuwAgiRKu8TW-_p9l9kMzAzEAEwSfee?usp=sharing)
 
 ## Citation
 If you find this repo helpful, please consider citing:
