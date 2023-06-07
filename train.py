@@ -474,10 +474,7 @@ def train(opt):
 
             current_grounding_score = np.array(eval_score['grounding_R@1IOU0.7']).mean() + np.array(eval_score['grounding_R@1IOU0.3']).mean() + np.array(eval_score['grounding_R@1IOU0.5']).mean() + np.array(eval_score['grounding_R@1IOU0.1']).mean()
             current_localization_score = 2./(1./eval_score['Precision'] + 1./eval_score['Recall'])
-            if opt.use_cider_rouge_as_current_dvc_score:
-                current_dvc_score = np.array(eval_score['CIDEr']).mean() + np.array(eval_score['ROUGE_L']).mean()
-            else:
-                current_dvc_score = np.array(eval_score['METEOR']).mean() + np.array(eval_score['soda_c']).mean()
+            current_dvc_score = np.array(eval_score['METEOR']).mean() + np.array(eval_score['soda_c']).mean()
             
             current_pc_score = np.array(eval_score['para_METEOR']).mean() + np.array(eval_score['para_CIDEr']).mean() + np.array(eval_score['para_Bleu_4']).mean()
             current_tal_score = eval_score['TAL_Average_mAP']
