@@ -1,5 +1,5 @@
 id: anet_c3d_dvc_rl
-base_cfg_path: cfgs/release/anet_c3d_msvg_dvc.yml
+base_cfg_path: cfgs/anet_c3d_msvg_dvc.yml
 
 lr: 0.00005
 learning_rate_decay_start: 3
@@ -20,5 +20,5 @@ pretrain: full
 optimizer_type: adamw
 pretrain_path: PRETRAINED_CHECKPOINT
 
-cached_tokens: data/anet/activitynet_train_ngrams_for_cider-idxs.p
+cached_tokens: anet/activitynet_train_ngrams_for_cider-idxs
 min_epoch_when_save: 0

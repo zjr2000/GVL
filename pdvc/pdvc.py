@@ -761,6 +761,53 @@ class PDVC(nn.Module):
             if self.training:
                 if self.opt.caption_loss_type != 'rl':
                     cap_prob = cap_head(hs_for_cap_head, reference_for_cap_head, others, seq_for_cap_head)
+                elif self.opt.caption_loss_type == 'rl':
+                    gen_result, sample_logprobs = cap_head.sample(hs_for_cap_head, reference_for_cap_head, others,
+                                                                            opt={'sample_max': 0})
+                    cap_head.eval()
+                    with torch.no_grad():
+                        greedy_res, _ = cap_head.sample(hs_for_cap_head, reference_for_cap_head, others)
+                    cap_head.train()
+                    gen_result = gen_result.reshape(-1, gen_result.shape[-1])
+                    greedy_res = greedy_res.reshape(-1, greedy_res.shape[-1])
+
+                    # gt_caption = [[self.translator.translate(cap, max_len=50) for cap in caps] for caps in dt['cap_raw']]
+                    # gt_caption = list(chain(*gt_caption))
+                    # gt_caption = [gt_caption[i] for i in cap_bigids]
+
+                    gt_caption = seq_for_cap_head.detach().cpu().numpy()
+                    if self.opt.cl_para_ratio > 0:
+                        gt_para = [self.translator.translate(' '.join(caps), max_len=150) for caps in dt['cap_raw']]
+                        # gt_caption = [gt_caption[cap_vid_ids[i]][cap_event_ids[i]] for i in range(len(cap_vid_ids))]
+                        para_gen_result = gen_result.reshape(N_, max_match_feat_num, -1)
+                        para_greedy_res = greedy_res.reshape(N_, max_match_feat_num, -1)
+                        para_gen_result_new = torch.zeros((N_, max_match_feat_num, para_gen_result.size(-1)), device=para_gen_result.device, dtype=torch.int)
+                        para_greedy_res_new = torch.zeros((N_, max_match_feat_num, para_greedy_res.size(-1)), device=para_greedy_res.device, dtype=torch.int)
+                        for i, (feat_ids, cap_ids) in enumerate(indices):
+                            cap_ids_reverse = np.argsort(cap_ids)
+                            para_gen_result_new[i][:len(cap_ids_reverse)] = para_gen_result[i][:len(cap_ids_reverse)][cap_ids_reverse]
+                            para_greedy_res_new[i][:len(cap_ids_reverse)] = para_greedy_res[i][:len(cap_ids_reverse)][cap_ids_reverse]
+                        para_reward, para_sample_meteor, para_greedy_meteor = get_caption_reward(self.scorers, para_greedy_res_new,
+                                                                                  gt_para,
+                                                                                  para_gen_result_new, self.scorer_weights,
+                                                                                  is_para=True)
+                        para_reward = para_reward[..., None].repeat(max_match_feat_num, 1).reshape(-1)
+                    else:
+                        para_reward = 0
+                    if self.opt.cl_sent_ratio > 0:
+                        reward, sample_meteor, greedy_meteor = get_caption_reward(self.scorers, greedy_res,
+                                                                                  gt_caption,
+                                                                                  gen_result, self.scorer_weights)
+                    else:
+                        reward = 0
+                    reward = para_reward * self.opt.cl_para_ratio + reward * self.opt.cl_sent_ratio
+                    reward = np.repeat(reward[:, np.newaxis], gen_result.size(1), 1)
+                    gen_result = gen_result * query_mask_for_cap_head.int().reshape(-1, 1)
+                    cap_rl_loss = cap_head.build_rl_loss(sample_logprobs, gen_result.float(),
+                                                                   sample_logprobs.new_tensor(reward))
+                    cap_loss = cap_rl_loss
+                    # cap_cost = -hs_r.new_tensor(greedy_meteor)
+                    return cap_loss.mean(), cap_probs, seq, 0 * cap_loss.mean() 
             else:
                 with torch.no_grad():
                     cap_prob = cap_head(hs_for_cap_head, reference_for_cap_head, others, seq_for_cap_head)
